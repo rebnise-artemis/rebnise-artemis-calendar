@@ -4,13 +4,13 @@
 
 ## 公開URL
 
-https://tadashisetomoto.github.io/rebnise-artemis-calendar/
+https://rebnise-artemis.github.io/rebnise-artemis-calendar/
 
 ### 購読用URL
 
-- 両チーム: `https://tadashisetomoto.github.io/rebnise-artemis-calendar/calendars/all.ics`
-- レブナイズ: `https://tadashisetomoto.github.io/rebnise-artemis-calendar/calendars/rebnise.ics`
-- アルテミス: `https://tadashisetomoto.github.io/rebnise-artemis-calendar/calendars/artemis.ics`
+- 両チーム: `https://rebnise-artemis.github.io/rebnise-artemis-calendar/calendars/all.ics`
+- レブナイズ: `https://rebnise-artemis.github.io/rebnise-artemis-calendar/calendars/rebnise.ics`
+- アルテミス: `https://rebnise-artemis.github.io/rebnise-artemis-calendar/calendars/artemis.ics`
 
 ## 画面構成
 
