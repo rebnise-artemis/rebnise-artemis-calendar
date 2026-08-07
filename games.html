@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>試合を選んで登録 | レブナイズ・アルテミス 試合カレンダー</title>
+<meta name="description" content="見たい試合を選んで、ひとつずつGoogleカレンダーに登録できます。">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="back-link" href="index.html">← シーズン全体を入れる</a>
+  <h1>試合を選んで登録</h1>
+  <p class="lead">登録したい試合の「Googleカレンダーに追加」を押してください。</p>
+</header>
+
+<main>
+  <section class="filters" aria-label="絞り込み">
+    <div class="filter-group" role="group" aria-label="チーム">
+      <button type="button" class="chip is-active" data-filter="team" data-value="all">両方</button>
+      <button type="button" class="chip" data-filter="team" data-value="rebnise">レブナイズ</button>
+      <button type="button" class="chip" data-filter="team" data-value="artemis">アルテミス</button>
+    </div>
+    <div class="filter-group" role="group" aria-label="大会種別">
+      <button type="button" class="chip is-active" data-filter="category" data-value="all">すべて</button>
+      <button type="button" class="chip" data-filter="category" data-value="preseason">プレシーズン</button>
+      <button type="button" class="chip" data-filter="category" data-value="regular">レギュラー</button>
+      <button type="button" class="chip" data-filter="category" data-value="postseason">ポストシーズン</button>
+    </div>
+    <div class="filter-group" role="group" aria-label="開催地">
+      <button type="button" class="chip is-active" data-filter="homeAway" data-value="all">HOME/AWAY</button>
+      <button type="button" class="chip" data-filter="homeAway" data-value="home">HOME</button>
+      <button type="button" class="chip" data-filter="homeAway" data-value="away">AWAY</button>
+    </div>
+    <div class="filter-group">
+      <select id="month" class="month-select" aria-label="年月で絞り込む">
+        <option value="all">すべての月</option>
+      </select>
+    </div>
+    <label class="toggle">
+      <input type="checkbox" id="show-past"> 過去の試合も表示
+    </label>
+  </section>
+
+  <p class="status" id="status">読み込み中…</p>
+  <ul class="game-list" id="game-list"></ul>
+</main>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

@@ -4,56 +4,77 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>レブナイズ・アルテミス 試合カレンダー</title>
-<meta name="description" content="鹿児島レブナイズとアルテミス北海道の試合予定を、クリックひとつでGoogleカレンダーに登録できます。">
+<meta name="description" content="鹿児島レブナイズとアルテミス北海道の全試合を、まとめてGoogleカレンダーに入れられます。">
 <meta property="og:title" content="レブナイズ・アルテミス 試合カレンダー">
-<meta property="og:description" content="鹿児島レブナイズとアルテミス北海道の試合予定を、クリックひとつでGoogleカレンダーに登録できます。">
+<meta property="og:description" content="鹿児島レブナイズとアルテミス北海道の全試合を、まとめてGoogleカレンダーに入れられます。">
 <meta property="og:type" content="website">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header class="site-header">
   <h1>レブナイズ・アルテミス 試合カレンダー</h1>
-  <p class="lead">見たい試合をカレンダーに登録できます。</p>
 </header>
 
 <main>
-  <section class="subscribe" id="subscribe" hidden>
-    <h2>シーズン全体を購読する</h2>
-    <p class="note">一度登録すれば、日程が変わったときも自動で反映されます（反映まで数時間〜1日ほどかかります）。<br>Googleカレンダーへの購読登録はパソコンからのみ行えます。スマートフォンの方は、各試合の「Googleカレンダーに追加」をお使いください。</p>
-    <div class="subscribe-buttons" id="subscribe-buttons"></div>
+  <section class="hero">
+    <h2>シーズン全体をGoogleカレンダーに入れる</h2>
+    <ul class="benefits">
+      <li>全試合がまとめて入ります</li>
+      <li>パソコンで1回設定すれば、スマートフォンのGoogleカレンダーアプリにも表示されます</li>
+    </ul>
+
+    <div class="filter-group team-select" role="group" aria-label="入れるチーム">
+      <button type="button" class="chip is-active" data-team="all">両チーム</button>
+      <button type="button" class="chip" data-team="rebnise">レブナイズ</button>
+      <button type="button" class="chip" data-team="artemis">アルテミス</button>
+    </div>
+
+    <p class="warn">どちらの方法も<strong>パソコンから</strong>行ってください。GoogleカレンダーのスマートフォンアプリにはURLで追加する機能もインポート機能もありません（Googleの仕様です）。</p>
   </section>
 
-  <section class="filters" aria-label="絞り込み">
-    <div class="filter-group" role="group" aria-label="チーム">
-      <button type="button" class="chip is-active" data-filter="team" data-value="all">両方</button>
-      <button type="button" class="chip" data-filter="team" data-value="rebnise">レブナイズ</button>
-      <button type="button" class="chip" data-filter="team" data-value="artemis">アルテミス</button>
+  <section class="method">
+    <h3>方法1: URLで購読する<span class="tag">おすすめ</span></h3>
+    <p class="method-why">日程や会場が変わったとき、自動で反映されます。</p>
+
+    <div class="url-row">
+      <input type="text" id="subscribe-url" readonly aria-label="購読用URL">
+      <button type="button" id="copy-url">URLをコピー</button>
     </div>
-    <div class="filter-group" role="group" aria-label="大会種別">
-      <button type="button" class="chip is-active" data-filter="category" data-value="all">すべて</button>
-      <button type="button" class="chip" data-filter="category" data-value="preseason">プレシーズン</button>
-      <button type="button" class="chip" data-filter="category" data-value="regular">レギュラー</button>
-      <button type="button" class="chip" data-filter="category" data-value="postseason">ポストシーズン</button>
-    </div>
-    <div class="filter-group" role="group" aria-label="開催地">
-      <button type="button" class="chip is-active" data-filter="homeAway" data-value="all">HOME/AWAY</button>
-      <button type="button" class="chip" data-filter="homeAway" data-value="home">HOME</button>
-      <button type="button" class="chip" data-filter="homeAway" data-value="away">AWAY</button>
-    </div>
-    <label class="toggle">
-      <input type="checkbox" id="show-past"> 過去の試合も表示
-    </label>
+    <p class="copy-status" id="copy-status" role="status"></p>
+
+    <ol class="steps">
+      <li>パソコンのブラウザでGoogleカレンダーを開く</li>
+      <li>左側の「他のカレンダー」の＋を押す</li>
+      <li>「URLで追加」を選ぶ</li>
+      <li>上のURLを貼り付けて「カレンダーを追加」を押す</li>
+    </ol>
+
+    <p class="note">反映のタイミングはGoogle側が決めており、最初に表示されるまで1日以上かかることがあります。</p>
   </section>
 
-  <p class="status" id="status">読み込み中…</p>
-  <ul class="game-list" id="game-list"></ul>
+  <section class="method">
+    <h3>方法2: ファイルを取り込む</h3>
+    <p class="method-why">すぐに全部入ります。ただし日程が変わったときは、取り込み直しが必要です。</p>
+
+    <a class="download-button" id="download-ics" href="calendars/all.ics" download>ファイルをダウンロード</a>
+
+    <ol class="steps">
+      <li>上のボタンでファイルをダウンロードする</li>
+      <li>パソコンのブラウザでGoogleカレンダーを開く</li>
+      <li>右上の歯車から「設定」を開く</li>
+      <li>左メニューの「インポート / エクスポート」を選ぶ</li>
+      <li>ダウンロードしたファイルと追加先のカレンダーを選び、「インポート」を押す</li>
+    </ol>
+  </section>
+
+  <p class="note other-app">Appleカレンダー・Outlookをお使いの方は<a id="webcal-link" href="webcal://">こちら</a>から登録できます。</p>
+
+  <section class="alt-route">
+    <p>今すぐスマートフォンで入れたい方は、試合を選んで登録できます。</p>
+    <a class="alt-button" href="games.html">試合を選んで登録する →</a>
+  </section>
 </main>
 
-<div class="selection-bar" id="selection-bar" hidden>
-  <span id="selection-count"></span>
-  <button type="button" id="download-ics">.ics でダウンロード</button>
-</div>
-
-<script type="module" src="app.js"></script>
+<script type="module" src="subscribe.js"></script>
 </body>
 </html>

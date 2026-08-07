@@ -1,6 +1,5 @@
 import { buildGoogleCalendarUrl } from './lib/google-link.js';
 import { resolveGameTimes } from './lib/datetime.js';
-import { buildCalendar } from './lib/ical.js';
 
 const TEAM_FILES = {
   rebnise: 'data/rebnise.json',
@@ -17,21 +16,16 @@ const WEEKDAYS = ['日', '月', '火', '水', '木', '金', '土'];
 
 const state = {
   entries: [],
-  filters: { team: 'all', category: 'all', homeAway: 'all' },
+  filters: { team: 'all', category: 'all', homeAway: 'all', month: 'all' },
   showPast: false,
   loadFailed: false,
-  selected: new Set(),
 };
 
 const els = {
   status: document.getElementById('status'),
   list: document.getElementById('game-list'),
   showPast: document.getElementById('show-past'),
-  bar: document.getElementById('selection-bar'),
-  count: document.getElementById('selection-count'),
-  download: document.getElementById('download-ics'),
-  subscribe: document.getElementById('subscribe'),
-  subscribeButtons: document.getElementById('subscribe-buttons'),
+  month: document.getElementById('month'),
 };
 
 async function load() {
@@ -49,7 +43,7 @@ async function load() {
     const sortKey = (e) => e.game.date + (e.game.start ?? '99:99');
     entries.sort((a, b) => sortKey(a).localeCompare(sortKey(b)));
     state.entries = entries;
-    renderSubscribeLinks();
+    renderMonthOptions();
     render();
   } catch (err) {
     state.loadFailed = true;
@@ -71,11 +65,12 @@ function isPast(entry) {
 }
 
 function visibleEntries() {
-  const { team, category, homeAway } = state.filters;
+  const { team, category, homeAway, month } = state.filters;
   return state.entries.filter((e) => {
     if (team !== 'all' && e.teamKey !== team) return false;
     if (category !== 'all' && e.game.category !== category) return false;
     if (homeAway !== 'all' && e.game.homeAway !== homeAway) return false;
+    if (month !== 'all' && e.game.date.slice(0, 7) !== month) return false;
     if (!state.showPast && isPast(e)) return false;
     return true;
   });
@@ -97,18 +92,6 @@ function renderCard(entry) {
   const { game, teamShort } = entry;
   const li = document.createElement('li');
   li.className = 'game-card' + (isPast(entry) ? ' is-past' : '');
-
-  const checkbox = document.createElement('input');
-  checkbox.type = 'checkbox';
-  checkbox.className = 'game-select';
-  checkbox.dataset.id = game.id;
-  checkbox.setAttribute('aria-label', `${game.opponent}戦を選択`);
-  checkbox.checked = state.selected.has(game.id);
-  checkbox.addEventListener('change', () => {
-    if (checkbox.checked) state.selected.add(game.id);
-    else state.selected.delete(game.id);
-    renderSelectionBar();
-  });
 
   const timeText = game.start
     ? `${escapeHtml(game.start)}〜`
@@ -133,33 +116,20 @@ function renderCard(entry) {
   link.textContent = 'Googleカレンダーに追加';
   body.appendChild(link);
 
-  li.append(checkbox, body);
+  li.append(body);
   return li;
 }
 
-const SUBSCRIBE_TARGETS = [
-  { file: 'calendars/all.ics', label: '両チーム' },
-  { file: 'calendars/rebnise.ics', label: 'レブナイズ' },
-  { file: 'calendars/artemis.ics', label: 'アルテミス' },
-];
-
-function renderSubscribeLinks() {
-  const base = `${window.location.host}${window.location.pathname.replace(/[^/]*$/, '')}`;
-  els.subscribeButtons.replaceChildren(
-    ...SUBSCRIBE_TARGETS.map(({ file, label }) => {
-      const a = document.createElement('a');
-      a.href = `webcal://${base}${file}`;
-      a.textContent = `${label}を購読`;
-      return a;
+// 選択肢は日程データから作る。entries は日付順に並んでいるので月も自然に並ぶ
+function renderMonthOptions() {
+  const months = [...new Set(state.entries.map((e) => e.game.date.slice(0, 7)))];
+  els.month.replaceChildren(
+    new Option('すべての月', 'all'),
+    ...months.map((m) => {
+      const [year, mm] = m.split('-');
+      return new Option(`${year}年${Number(mm)}月`, m);
     })
   );
-  els.subscribe.hidden = false;
-}
-
-function renderSelectionBar() {
-  const count = state.selected.size;
-  els.bar.hidden = count === 0;
-  els.count.textContent = `${count}件を選択中`;
 }
 
 function render() {
@@ -176,8 +146,6 @@ function render() {
   } else {
     els.status.hidden = true;
   }
-
-  renderSelectionBar();
 }
 
 document.querySelectorAll('.chip').forEach((chip) => {
@@ -191,26 +159,15 @@ document.querySelectorAll('.chip').forEach((chip) => {
   });
 });
 
-els.showPast.addEventListener('change', () => {
-  state.showPast = els.showPast.checked;
+els.month.addEventListener('change', () => {
+  state.filters.month = els.month.value;
+  els.month.classList.toggle('is-active', els.month.value !== 'all');
   render();
 });
 
-els.download.addEventListener('click', () => {
-  const entries = state.entries.filter((e) => state.selected.has(e.game.id));
-  if (entries.length === 0) return;
-
-  const ics = buildCalendar(entries, '選択した試合');
-  const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'games.ics';
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
+els.showPast.addEventListener('change', () => {
+  state.showPast = els.showPast.checked;
+  render();
 });
 
 load();
