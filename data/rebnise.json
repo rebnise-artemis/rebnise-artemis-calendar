@@ -58,6 +58,12 @@
     { "id": "reb-20270320", "date": "2027-03-20", "start": "14:05", "end": null, "opponent": "東京ユナイテッドバスケットボールクラブ", "venue": "鹿児島県総合体育センター体育館", "homeAway": "home", "category": "regular", "note": "" },
     { "id": "reb-20270327", "date": "2027-03-27", "start": "15:05", "end": null, "opponent": "徳島ガンバロウズ", "venue": "アスティとくしま", "homeAway": "away", "category": "regular", "note": "" },
     { "id": "reb-20270328", "date": "2027-03-28", "start": "14:05", "end": null, "opponent": "徳島ガンバロウズ", "venue": "アスティとくしま", "homeAway": "away", "category": "regular", "note": "" },
+    { "id": "reb-20270403", "date": "2027-04-03", "start": "15:05", "end": null, "opponent": "ライジングゼファー福岡", "venue": "調整中", "homeAway": "home", "category": "regular", "note": "会場は未発表です。決まり次第更新されます。" },
+    { "id": "reb-20270404", "date": "2027-04-04", "start": "13:05", "end": null, "opponent": "ライジングゼファー福岡", "venue": "調整中", "homeAway": "home", "category": "regular", "note": "会場は未発表です。決まり次第更新されます。" },
+    { "id": "reb-20270410", "date": "2027-04-10", "start": "15:05", "end": null, "opponent": "熊本ヴォルターズ", "venue": "調整中", "homeAway": "away", "category": "regular", "note": "会場は未発表です。決まり次第更新されます。" },
+    { "id": "reb-20270411", "date": "2027-04-11", "start": "14:05", "end": null, "opponent": "熊本ヴォルターズ", "venue": "調整中", "homeAway": "away", "category": "regular", "note": "会場は未発表です。決まり次第更新されます。" },
+    { "id": "reb-20270417", "date": "2027-04-17", "start": "15:05", "end": null, "opponent": "東京八王子ビートレインズ", "venue": "調整中", "homeAway": "home", "category": "regular", "note": "会場は未発表です。決まり次第更新されます。" },
+    { "id": "reb-20270418", "date": "2027-04-18", "start": "13:05", "end": null, "opponent": "東京八王子ビートレインズ", "venue": "調整中", "homeAway": "home", "category": "regular", "note": "会場は未発表です。決まり次第更新されます。" },
     { "id": "reb-20270424", "date": "2027-04-24", "start": null, "end": null, "opponent": "香川ファイブアローズ", "venue": "あなぶきアリーナ香川(メイン)", "homeAway": "away", "category": "regular", "note": "" },
     { "id": "reb-20270425", "date": "2027-04-25", "start": null, "end": null, "opponent": "香川ファイブアローズ", "venue": "あなぶきアリーナ香川(メイン)", "homeAway": "away", "category": "regular", "note": "" }
   ]
