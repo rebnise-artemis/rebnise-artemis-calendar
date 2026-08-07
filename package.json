@@ -1,0 +1,11 @@
+{
+  "name": "rebnise-artemis-calendar",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "鹿児島レブナイズ・アルテミス北海道の試合予定をGoogleカレンダーに登録できるサイト",
+  "scripts": {
+    "test": "node --test test/",
+    "build": "node scripts/build-ics.js"
+  }
+}
