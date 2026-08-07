@@ -1407,6 +1407,7 @@ const state = {
   entries: [],
   filters: { team: 'all', category: 'all', homeAway: 'all' },
   showPast: false,
+  loadFailed: false,
 };
 
 const els = {
@@ -1432,6 +1433,7 @@ async function load() {
     state.entries = entries;
     render();
   } catch (err) {
+    state.loadFailed = true;
     els.status.hidden = false;
     els.status.classList.add('is-error');
     els.status.textContent = `日程を読み込めませんでした。時間をおいて再読み込みしてください。（${err.message}）`;
@@ -1493,7 +1495,7 @@ function renderCard(entry) {
     <p class="game-title">${escapeHtml(teamShort)} vs ${escapeHtml(game.opponent)}</p>
     <div class="game-venue">${escapeHtml(game.venue)}</div>
     <div class="badges">
-      <span class="badge badge-${game.homeAway}">${game.homeAway === 'home' ? 'HOME' : 'AWAY'}</span>
+      <span class="badge badge-${escapeHtml(game.homeAway)}">${game.homeAway === 'home' ? 'HOME' : 'AWAY'}</span>
       <span class="badge badge-category">${CATEGORY_LABEL[game.category]}</span>
     </div>
   `;
@@ -1511,6 +1513,9 @@ function renderCard(entry) {
 }
 
 function render() {
+  // 読み込みに失敗しているときは、エラー表示をフィルタ操作で上書きしない
+  if (state.loadFailed) return;
+
   const entries = visibleEntries();
   els.list.replaceChildren(...entries.map(renderCard));
 
@@ -1603,9 +1608,12 @@ const state = {
   entries: [],
   filters: { team: 'all', category: 'all', homeAway: 'all' },
   showPast: false,
+  loadFailed: false,
   selected: new Set(),
 };
 ```
+
+`loadFailed` は Task 9 で入れたものなので消さないこと。消すと、読み込み失敗後にフィルタを操作したときエラー表示が「条件に合う試合がありません」に化ける。
 
 - [ ] **Step 4: `els` に新しい要素を追加する**
 
