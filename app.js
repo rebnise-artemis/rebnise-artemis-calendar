@@ -1,5 +1,6 @@
 import { buildGoogleCalendarUrl } from './lib/google-link.js';
 import { resolveGameTimes } from './lib/datetime.js';
+import { buildCalendar } from './lib/ical.js';
 
 const TEAM_FILES = {
   rebnise: 'data/rebnise.json',
@@ -19,12 +20,18 @@ const state = {
   filters: { team: 'all', category: 'all', homeAway: 'all' },
   showPast: false,
   loadFailed: false,
+  selected: new Set(),
 };
 
 const els = {
   status: document.getElementById('status'),
   list: document.getElementById('game-list'),
   showPast: document.getElementById('show-past'),
+  bar: document.getElementById('selection-bar'),
+  count: document.getElementById('selection-count'),
+  download: document.getElementById('download-ics'),
+  subscribe: document.getElementById('subscribe'),
+  subscribeButtons: document.getElementById('subscribe-buttons'),
 };
 
 async function load() {
@@ -42,6 +49,7 @@ async function load() {
     const sortKey = (e) => e.game.date + (e.game.start ?? '99:99');
     entries.sort((a, b) => sortKey(a).localeCompare(sortKey(b)));
     state.entries = entries;
+    renderSubscribeLinks();
     render();
   } catch (err) {
     state.loadFailed = true;
@@ -95,6 +103,12 @@ function renderCard(entry) {
   checkbox.className = 'game-select';
   checkbox.dataset.id = game.id;
   checkbox.setAttribute('aria-label', `${game.opponent}戦を選択`);
+  checkbox.checked = state.selected.has(game.id);
+  checkbox.addEventListener('change', () => {
+    if (checkbox.checked) state.selected.add(game.id);
+    else state.selected.delete(game.id);
+    renderSelectionBar();
+  });
 
   const timeText = game.start
     ? `${escapeHtml(game.start)}〜`
@@ -123,6 +137,31 @@ function renderCard(entry) {
   return li;
 }
 
+const SUBSCRIBE_TARGETS = [
+  { file: 'calendars/all.ics', label: '両チーム' },
+  { file: 'calendars/rebnise.ics', label: 'レブナイズ' },
+  { file: 'calendars/artemis.ics', label: 'アルテミス' },
+];
+
+function renderSubscribeLinks() {
+  const base = `${window.location.host}${window.location.pathname.replace(/[^/]*$/, '')}`;
+  els.subscribeButtons.replaceChildren(
+    ...SUBSCRIBE_TARGETS.map(({ file, label }) => {
+      const a = document.createElement('a');
+      a.href = `webcal://${base}${file}`;
+      a.textContent = `${label}を購読`;
+      return a;
+    })
+  );
+  els.subscribe.hidden = false;
+}
+
+function renderSelectionBar() {
+  const count = state.selected.size;
+  els.bar.hidden = count === 0;
+  els.count.textContent = `${count}件を選択中`;
+}
+
 function render() {
   // 読み込みに失敗しているときは、エラー表示をフィルタ操作で上書きしない
   if (state.loadFailed) return;
@@ -137,6 +176,8 @@ function render() {
   } else {
     els.status.hidden = true;
   }
+
+  renderSelectionBar();
 }
 
 document.querySelectorAll('.chip').forEach((chip) => {
@@ -153,6 +194,23 @@ document.querySelectorAll('.chip').forEach((chip) => {
 els.showPast.addEventListener('change', () => {
   state.showPast = els.showPast.checked;
   render();
+});
+
+els.download.addEventListener('click', () => {
+  const entries = state.entries.filter((e) => state.selected.has(e.game.id));
+  if (entries.length === 0) return;
+
+  const ics = buildCalendar(entries, '選択した試合');
+  const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'games.ics';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
 });
 
 load();
