@@ -21,10 +21,13 @@ https://rebnise-artemis.github.io/rebnise-artemis-calendar/
 
 ## 日程を更新する手順
 
-1. `data/rebnise.json` または `data/artemis.json` を編集する
-2. `npm test` を実行してテストが通ることを確認する
-3. `npm run build` を実行して `calendars/*.ics` を再生成する
-4. コミットしてpushする（GitHub Pagesが自動で反映されます）
+`data/rebnise.json` と `data/artemis.json` は、リポジトリ `bleague-schedule` から自動で生成しています。手で編集しないでください（次の更新で上書きされます）。
+
+- レブナイズ: `bleague-schedule` が B.LEAGUE 公式から取得した鹿児島の試合
+- アルテミス: アルテミス北海道公式サイトの試合スケジュール（https://artemis-hokkaido.jp/game/）
+
+1. `bleague-schedule` で日程を更新したあと、`npm run sync-rebnise-artemis` を実行する（このリポジトリの `data/*.json` を書き換え、`npm test` と `npm run build` まで行います）
+2. 差分を確認してコミットし、pushする（GitHub Pagesが自動で反映されます）
 
 ### 注意
 
