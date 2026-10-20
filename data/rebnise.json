@@ -4,6 +4,8 @@
   "sport": "basketball",
   "season": "2026-27",
   "games": [
+    { "id": "reb-20260905", "date": "2026-09-05", "start": "13:00", "end": null, "opponent": "アルティーリ千葉", "venue": "SAGAアリーナ", "homeAway": "home", "category": "preseason", "note": "" },
+    { "id": "reb-20260906", "date": "2026-09-06", "start": "13:00", "end": null, "opponent": "コヤンソノ スカイガナーズ", "venue": "SAGAアリーナ", "homeAway": "home", "category": "preseason", "note": "" },
     { "id": "reb-20260912", "date": "2026-09-12", "start": "15:05", "end": null, "opponent": "トライフープ岡山", "venue": "阿久根市総合体育館", "homeAway": "home", "category": "preseason", "note": "" },
     { "id": "reb-20260913", "date": "2026-09-13", "start": "13:05", "end": null, "opponent": "トライフープ岡山", "venue": "阿久根市総合体育館", "homeAway": "home", "category": "preseason", "note": "" },
     { "id": "reb-20260926", "date": "2026-09-26", "start": "15:05", "end": null, "opponent": "ライジングゼファー福岡", "venue": "鹿児島県総合体育センター体育館", "homeAway": "home", "category": "regular", "note": "" },
